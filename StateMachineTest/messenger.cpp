@@ -14,6 +14,11 @@ Messenger::Messenger(QObject *parent) : QObject(parent)
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, ZMQ_SUB);
     subscriber.connect("tcp://localhost:5556");
+
+
+//    zmq::socket_t *publisher = new zmq::socket_t(context, ZMQ_PUB);
+//    publisher->connect("tcp://localhost:5555");
+
     zmq::socket_t publisher(context, ZMQ_PUB);
     publisher.connect("tcp://localhost:5555");
 
@@ -26,11 +31,15 @@ Messenger::Messenger(QObject *parent) : QObject(parent)
 
 void Messenger::poll()
 {
+//    zmq::message_t &message = "test";
+//    publisher.send(message);
     //qDebug() << "Polled";
 }
 
 void Messenger::lightsActivate()
 {
+    zmq::message_t message;
+   // publisher.send(message);
     qDebug() << "lightsActivate triggered by messenger";
     emit lightsActivated();
 }
@@ -43,7 +52,12 @@ void Messenger::lightsDeactivate()
 
 void Messenger::videologgerActivate()
 {
+    std::string mymessage = "testing";
+    zmq::message_t message(mymessage.size());
+    memcpy (message.data(), mymessage.data(), mymessage.size());
+ //   publisher().send(message);
     qDebug() << "videologgerActivate triggered by messenger";
+    qDebug() << "sending " << message.data();
     emit videologgerActivated();
 }
 

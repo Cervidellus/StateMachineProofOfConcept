@@ -25,7 +25,6 @@ signals:
 public slots:
 
 protected:
-    //trying to make a qtreewidget of states
     QList<QTreeWidgetItem *> mStatesList;
 private:
     Ui::MainWindow *ui;

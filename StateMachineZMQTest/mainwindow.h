@@ -18,11 +18,14 @@ public:
 
 private slots:
         void sendMessage(QString message);
-        void pollZMQ(zmq::socket_t* subscriber);
+        //void pollZMQ(zmq::socket_t* subscriber);
+        void pollZMQ(zmq::pollitem_t pollItems[]);
+
 
 private:
     Ui::MainWindow *ui;
     void addZMQButton(QString name, QString message, int row, int column);
+
 
 //    void *context;
 //    void *subscriber;

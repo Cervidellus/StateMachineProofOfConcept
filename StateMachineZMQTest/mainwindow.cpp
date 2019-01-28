@@ -22,23 +22,42 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //create the subscriber and publishers for this node.
     //TODO:: I need to be able to pass the subscriber to the polling function
-    zmq::context_t *context = new zmq::context_t(1);
-    zmq::socket_t *subscriber = new zmq::socket_t(*context, ZMQ_SUB);
-    subscriber->connect("tcp://localhost:5556");
-    zmq::socket_t publisher(*context, ZMQ_PUB);
+    //zmq::context_t *context = new zmq::context_t(1);
+    zmq::context_t context(1);
+    //zmq::socket_t *subscriber = new zmq::socket_t(context, ZMQ_SUB);
+    zmq::socket_t subscriber(context, ZMQ_SUB);
+    subscriber.connect("tcp://localhost:5556");
+    zmq::socket_t publisher(context, ZMQ_PUB);
     publisher.connect("tcp://localhost:5555");
+
+      //Initialize poll set
+    zmq::pollitem_t pollItems [] = {
+        {subscriber, 0, ZMQ_POLLIN, 0}
+    };
 
     //Connect a ZMQ polling function to the main loop
     QTimer *timer = new QTimer(this);
     //connect(timer, &QTimer::timeout, this, &MainWindow::pollZMQ);
-    connect(timer, &QTimer::timeout, this,[=](){ this->pollZMQ(subscriber);});
+    connect(timer, &QTimer::timeout, this,[&](){
+        //pollZMQ(pollItems);
+        qDebug() << "Polling ZMQ";
+        zmq::message_t message;
+        zmq_poll(&pollItems[0], 2, 200);
+        qDebug() << pollItems[0].events;
+        if(pollItems[0].revents & ZMQ_POLLIN){
+            subscriber.recv(&message);
+            qDebug() << "message received";
+        }
+
+
+    });
     timer->start(500);//polling rate in milliseconds, use zero for fastest rate
 
     //change it so that it automagically figures out the row
 
     //change it so that you can add button pairs
 
-
+//pollZMQ(pollItems);
 }
 
 MainWindow::~MainWindow()
@@ -58,22 +77,20 @@ void MainWindow::sendMessage(QString message)
     qDebug() << message;
 }
 
-void MainWindow::pollZMQ(zmq::socket_t* subscriber)
+void MainWindow::pollZMQ(zmq::pollitem_t pollItems[])
 {
     qDebug() << "Polling ZMQ";
-    zmq::message_t testmessage;
-
-
- //   zmq_getsockopt(subscriber,ZMQ_EVENTS, &events, &eventsSize);
-
-//    try {
-    subscriber->recv(&testmessage);
+    zmq::message_t message;
+//    try{
+//        int rc = zmq::poll (&pollItems[0], 200);
 //    }
-//    catch(zmq::error_t& e){}
+//    catch (int i){
+//        qDebug() << i;
+//    }
 
-//    int rc = zmq::message_t.;
-//    qDebug() << rc;
+    zmq_poll(&pollItems[0], 2, 200);
 
-//    subscriber->recv(&message, flags);
-//    qDebug() << message.data();
+    qDebug() << pollItems[0].revents;
+
+
 }

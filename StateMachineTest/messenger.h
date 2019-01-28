@@ -7,8 +7,11 @@
 //3. Translates ZMQ messages from other nodes into Qt signals
 //4. Sends logging messages over ZMQ to the textlogger node
 
+//TODO: convert this to a singleton pattern and see if I get access in member functions
+
 #include <QObject>
 #include <QThread>
+#include <zmq.hpp>
 
 class Messenger : public QObject
 {
@@ -35,6 +38,8 @@ private slots:
 
 private:
     //void sendLightsOn();
+protected:
+//    zmq::socket_t publisher();
 };
 
 //The Intermediary class starts the hub of the XSUB/XPUB pattern.
