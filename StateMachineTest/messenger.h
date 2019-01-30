@@ -7,7 +7,7 @@
 //3. Translates ZMQ messages from other nodes into Qt signals
 //4. Sends logging messages over ZMQ to the textlogger node
 
-//TODO: convert this to a singleton pattern and see if I get access in member functions
+//TODO: Maybe I can have a member pointer, and then in the constructor assign the pointer to the object created.
 
 #include <QObject>
 #include <QThread>
@@ -38,6 +38,9 @@ private slots:
 
 private:
     //void sendLightsOn();
+    zmq::context_t context_;//not sure if this is working
+
+
 protected:
 //    zmq::socket_t publisher();
 };

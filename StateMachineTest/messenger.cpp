@@ -2,30 +2,57 @@
 
 #include <QTimer>
 #include <QDebug>
+#include <QDataStream>
 #include <zmq.hpp>
 
-Messenger::Messenger(QObject *parent) : QObject(parent)
+Messenger::Messenger(QObject *parent) : QObject(parent) , context_(1)
 {
     //Start the intermediary thread for the XPUB/XSUB pattern, to be used by all other nodes.
-    IntermediaryThread *intermediaryThread = new IntermediaryThread;
-    intermediaryThread->start();
+//    IntermediaryThread *intermediaryThread = new IntermediaryThread;
+//    intermediaryThread->start();
+//I might nees to set up my socket manually like so:
+//    context_.setctxopt()
+    //xpux/xsub owns 5555 and 5556
 
     //create the subscriber and publishers for this node
     zmq::context_t context(1);
-    zmq::socket_t subscriber(context, ZMQ_SUB);
-    subscriber.connect("tcp://localhost:5556");
-
-
-//    zmq::socket_t *publisher = new zmq::socket_t(context, ZMQ_PUB);
-//    publisher->connect("tcp://localhost:5555");
+//    zmq::socket_t subscriber(context, ZMQ_SUB);
+//    subscriber.connect("tcp://127.0.0.1:5555");
 
     zmq::socket_t publisher(context, ZMQ_PUB);
-    publisher.connect("tcp://localhost:5555");
+
+    publisher.bind("tcp://127.0.0.1:5556");
 
     //Connect a message polling function to the main event loop
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Messenger::poll);
-    timer->start(500);//polling rate in milliseconds, use zero for fastest rate
+    connect(timer, &QTimer::timeout, this, [&](){
+        std::string teststring2 = "stdstring test";
+        zmq::message_t testZmqMessage(teststring2.data(), teststring2.length());
+        //memcpy(testZmqMessage.data(), teststring2.c_str(), teststring2.length());
+        try {
+            publisher.send(testZmqMessage);
+        } catch (const std::exception& e) {
+            qDebug() << e.what();
+          //  qDebug() << "error in try block";
+        }
+        qDebug() << "sent " << teststring2.data();
+    });
+//    connect(timer, &QTimer::timeout, this, &Messenger::poll);
+//    timer->start(1000);//polling rate in milliseconds, use zero for fastest rate
+
+
+
+    std::string teststring2 = "12345";
+    zmq::message_t testZmqMessage(5);
+    memcpy (testZmqMessage.data(), "Hello", 5);
+    try {
+        publisher.send(testZmqMessage);
+
+    } catch (const std::exception& e) {
+        qDebug() << e.what();
+      //  qDebug() << "error in try block";
+    }
+    qDebug() << "sent " << teststring2.data();
 
 }
 

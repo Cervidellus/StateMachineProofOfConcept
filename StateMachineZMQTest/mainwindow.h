@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <zmq.hpp>
+#include <messenger.h>
 
 namespace Ui {
 class MainWindow;
@@ -17,18 +18,11 @@ public:
     ~MainWindow();
 
 private slots:
-        void sendMessage(QString message);
-        //void pollZMQ(zmq::socket_t* subscriber);
-        void pollZMQ(zmq::pollitem_t pollItems[]);
-
 
 private:
     Ui::MainWindow *ui;
+    Messenger m_messenger; //used for state machine communications
     void addZMQButton(QString name, QString message, int row, int column);
-
-
-//    void *context;
-//    void *subscriber;
 };
 
 #endif // MAINWINDOW_H
