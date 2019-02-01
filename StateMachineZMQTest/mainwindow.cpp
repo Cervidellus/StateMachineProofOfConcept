@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //Add buttons for pre-defined messages to be sent
-    addZMQButton("Lights Turned On", "Lights Turned On", 0, 0);
+    addZMQButton("Lights Turned On", "small", 0, 0);
     addZMQButton("Lights Turned Off", "Lights Turned Off", 0, 1);
     addZMQButton("Video Logger Started", "Video Logger Started", 1, 0);
     addZMQButton("Video Logger Stopped", "Video Logger Stopped", 1, 1);
