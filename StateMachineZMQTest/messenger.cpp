@@ -14,7 +14,7 @@ Messenger::Messenger(QObject *parent) : QObject(parent),
     //make connections between subscriber thread and handler
 
 
-    connect(subscriberThread, &SubscriberThread::messageReceived, this, &Messenger::handleMessage);
+    connect(subscriberThread, &SubscriberThread::messageReceived, this, &Messenger::processMessage);
     //start subscriber thread
     subscriberThread->start();
 }
@@ -28,11 +28,15 @@ void Messenger::publish(const QString &message)
 //  TODO: handle error if send fails
 }
 
-void Messenger::handleMessage(const QString &message){
+void Messenger::processMessage(const QString message){
     //todo to work as a library, I guess I need to separate this out as its own class so each node implements its own thing here
     //todo, connect message to console window
+    //The intention here is to process the message, parsing it into the envelope, message, and parameters
+    //I may have this as something that ends up in the application rather than the library
+    //for now, I just pass the message to the application
     qDebug() << "Message in message handler";
     qDebug() << message;
+    emit messageProcessed(message);
 }
 
 void SubscriberThread::run() {
@@ -40,13 +44,14 @@ void SubscriberThread::run() {
     //then I'll set it up for xpub/xsub
     //then I'll standardize message structure
 
+    //I need to initialize the subscriber in the mainwindow, and then run it...
+
 
     //set up socket
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, ZMQ_SUB);
     subscriber.connect("tcp://127.0.0.1:5556");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "", 0);//subscribes to all messages
-
     while (true){
         //recieve and hand off messages
         zmq::message_t received;

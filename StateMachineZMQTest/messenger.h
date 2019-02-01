@@ -18,9 +18,10 @@ public:
     void publish(const QString &message); //publishes a message to the state machine communication publisher channel
 
 signals:
+    void messageProcessed(const QString message);
 
 public slots:
-    void handleMessage(const QString &message);
+    void processMessage(const QString message);
 
 private:
     zmq::context_t m_context;
