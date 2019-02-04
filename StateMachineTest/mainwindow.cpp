@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    Messenger *messenger = new Messenger();
+
     MessageHandler *messageHandler = new MessageHandler();
 
     QStateMachine *machine = new QStateMachine();
@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initialState->addTransition(ui->pushButton1, &QPushButton::clicked, runningState);
     runningState->addTransition(runningState, &QState::finished, finalState);
     pickupSectionState->addTransition(ui->pushButton2, &QPushButton::clicked, movingToDropoffState);
+    pickupSectionState->addTransition(messageHandler, &MessageHandler::lightsDeactivated, movingToDropoffState);
     movingToDropoffState->addTransition(ui->pushButton1, &QPushButton::clicked, droppingOffSectionState);
     droppingOffSectionState->addTransition(ui->pushButton2, &QPushButton::clicked, movingToPickupState);
     movingToPickupState->addTransition(ui->pushButton1, &QPushButton::clicked, pickupSectionState);

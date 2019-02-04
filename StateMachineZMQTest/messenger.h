@@ -20,22 +20,8 @@ public:
 signals:
     void messageProcessed(const QString message);//passes the message from subscriber to GUI
 
-    //signals for the state machine
-    //    void lightsActivated();
-    //    void lightsDeactivated();
-    //    void videologgerActivated();
-    //    void videologgerDeactivated();
-    //    void movedToPickup();
-
 public slots:
     void processMessage(const QString message);//will take a QJsonObject class and parse it.I will likely remove this.
-
-    //slots to trigger outgoing ZMQ messages
-//    void lightsActivate();
-//    void lightsDeactivate();
-//    void videologgerActivate();
-//    void videologgerDeactivate();
-//    void movetoPickup();
 
 private:
     zmq::context_t m_context;

@@ -1,55 +1,46 @@
 #ifndef MESSENGER_H
 #define MESSENGER_H
 
-//The messenger class:
-//1. connects to the ZMQ messanging ports
-//2. Sends command messages over ZMQ to other nodes
-//3. Translates ZMQ messages from other nodes into Qt signals
-//4. Sends logging messages over ZMQ to the textlogger node
-
-//TODO: Maybe I can have a member pointer, and then in the constructor assign the pointer to the object created.
+//sets up communication channels between the state machine and other nodes
 
 #include <QObject>
 #include <QThread>
 #include <zmq.hpp>
+
+
+class QThread;
+class QString;
 
 class Messenger : public QObject
 {
     Q_OBJECT
 public:
     explicit Messenger(QObject *parent = nullptr);
+    void publish(const QString &message); //publishes a message to the state machine communication publisher channel
 
 signals:
-    //signals for the state machine
-    void lightsActivated();
-    void lightsDeactivated();
-    void videologgerActivated();
-    void videologgerDeactivated();
+    void messageProcessed(const QString message);//passes the message from subscriber to GUI
 
 public slots:
-    //slots to trigger outgoing ZMQ messages
-    void lightsActivate();
-    void lightsDeactivate();
-    void videologgerActivate();
-    void videologgerDeactivate();
-
-private slots:
-    void poll();
+    void processMessage(const QString message);//will take a QJsonObject class and parse it.I will likely remove this.
 
 private:
-    zmq::context_t context_;//not sure if this is working
+    zmq::context_t m_context;
+    zmq::socket_t m_publisher;
 
-
-protected:
-//    zmq::socket_t publisher();
 };
 
-//The Intermediary class starts the hub of the XSUB/XPUB pattern.
-class IntermediaryThread : public QThread
+
+//SubscriberThread receives messages from the state machine communication subscriber channel
+class SubscriberThread : public QThread
 {
     Q_OBJECT
 
     void run() override;
+
+signals:
+    void messageReceived(const QString message);
+
 };
 
 #endif // MESSENGER_H

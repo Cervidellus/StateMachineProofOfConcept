@@ -20,7 +20,7 @@
       <item>
        <widget class="QPushButton" name="pushButton1">
         <property name="text">
-         <string>PushButton1</string>
+         <string>Start Machine</string>
         </property>
        </widget>
       </item>
@@ -106,7 +106,7 @@
      <x>0</x>
      <y>0</y>
      <width>771</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
