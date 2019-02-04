@@ -10,10 +10,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //Add buttons for pre-defined messages to be sent
-    addZMQButton("Lights Turned On", "small", 0, 0);
-    addZMQButton("Lights Turned Off", "Lights Turned Off", 0, 1);
-    addZMQButton("Video Logger Started", "Video Logger Started", 1, 0);
-    addZMQButton("Video Logger Stopped", "Video Logger Stopped", 1, 1);
+    addZMQButton("Turn Lights On", "Turn Light On", 0 , 0);
+    addZMQButton("Lights Turned On", "Lights Turned On", 0, 1);
+    addZMQButton("Turn Lights Off", "Turn Lights Off", 1, 0);
+    addZMQButton("Lights Turned Off", "Lights Turned Off", 1 , 1);
+    addZMQButton("Turn Video Logger On", "Turn Video Logger On", 2, 0);
+    addZMQButton("Video Logger Started", "Video Logger Started", 2, 1);
+    addZMQButton("Video Logger Stopped", "Video Logger Stopped", 3, 1);
+    addZMQButton("Move To Pickup", "Move To Pickup", 4, 0);
+    addZMQButton("Moved to Pickup", "Moved to Pickup", 4, 1);
 
     //TODO:add a dialog for adding new buttons that will send a particular message
 
@@ -39,5 +44,6 @@ void MainWindow::addZMQButton(QString name, QString message, int row, int column
 
 void MainWindow::handleSubscriberMessage(const QString message){
     ui->SubscriberMessages->addItem(message);
+    ui->SubscriberMessages->scrollToBottom();
 }
 

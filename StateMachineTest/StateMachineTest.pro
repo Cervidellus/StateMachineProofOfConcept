@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    messenger.cpp
+    messenger.cpp \
+    messagehandler.cpp
 
 HEADERS += \
         mainwindow.h \
-    messenger.h
+    messenger.h \
+    messagehandler.h
 
 FORMS += \
         mainwindow.ui

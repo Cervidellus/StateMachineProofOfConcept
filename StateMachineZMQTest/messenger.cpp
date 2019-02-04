@@ -34,8 +34,6 @@ void Messenger::processMessage(const QString message){
     //The intention here is to process the message, parsing it into the envelope, message, and parameters
     //I may have this as something that ends up in the application rather than the library
     //for now, I just pass the message to the application
-    qDebug() << "Message in message handler";
-    qDebug() << message;
     emit messageProcessed(message);
 }
 

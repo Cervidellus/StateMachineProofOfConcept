@@ -23,20 +23,20 @@ Messenger::Messenger(QObject *parent) : QObject(parent) , context_(1)
 
     publisher.bind("tcp://127.0.0.1:5556");
 
-    //Connect a message polling function to the main event loop
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [&](){
-        std::string teststring2 = "stdstring test";
-        zmq::message_t testZmqMessage(teststring2.data(), teststring2.length());
-        //memcpy(testZmqMessage.data(), teststring2.c_str(), teststring2.length());
-        try {
-            publisher.send(testZmqMessage);
-        } catch (const std::exception& e) {
-            qDebug() << e.what();
-          //  qDebug() << "error in try block";
-        }
-        qDebug() << "sent " << teststring2.data();
-    });
+//    //Connect a message polling function to the main event loop
+//    QTimer *timer = new QTimer(this);
+//    connect(timer, &QTimer::timeout, this, [&](){
+//        std::string teststring2 = "stdstring test";
+//        zmq::message_t testZmqMessage(teststring2.data(), teststring2.length());
+//        //memcpy(testZmqMessage.data(), teststring2.c_str(), teststring2.length());
+//        try {
+//            publisher.send(testZmqMessage);
+//        } catch (const std::exception& e) {
+//            qDebug() << e.what();
+//          //  qDebug() << "error in try block";
+//        }
+//        qDebug() << "sent " << teststring2.data();
+//    });
 //    connect(timer, &QTimer::timeout, this, &Messenger::poll);
 //    timer->start(1000);//polling rate in milliseconds, use zero for fastest rate
 

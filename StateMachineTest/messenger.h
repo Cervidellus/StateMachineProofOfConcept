@@ -37,7 +37,6 @@ private slots:
     void poll();
 
 private:
-    //void sendLightsOn();
     zmq::context_t context_;//not sure if this is working
 
 
