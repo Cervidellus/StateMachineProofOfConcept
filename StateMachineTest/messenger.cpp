@@ -1,6 +1,5 @@
 #include <QString>
 #include <QDebug>
-//#include "Windows.h"
 
 #include "messenger.h"
 
@@ -49,11 +48,16 @@ void Messenger::publish(const QString &message)
 }
 
 void Messenger::processMessage(const QString message){
-    //todo to work as a library, I guess I need to separate this out as its own class so each node implements its own thing here
     //todo, connect message to console window
     //The intention here is to process the message, parsing it into the envelope, message, and parameters
     //I may have this as something that ends up in the application rather than the library
-    //for now, I just pass the message to the application
+
+    //If else statements to parse out message.
+
+    if (message == "VideoLoggerActivated"){
+        emit videologgerActivated();
+    }
+
     qDebug() << "Message Received:" << message;
     emit messageProcessed(message);
 }
@@ -97,4 +101,31 @@ void IntermediaryThread::run()
         centralPub.bind("tcp://127.0.0.1:5555");
 
         zmq::proxy(centralSub, centralPub, nullptr);
+}
+
+void Messenger::lightsActivate()
+{
+    zmq::message_t message;
+   // publisher.send(message);
+    qDebug() << "lightsActivate triggered by messenger";
+    emit lightsActivated();
+}
+
+void Messenger::lightsDeactivate()
+{
+    qDebug() << "lightsDeactivate triggered by messenger";
+    emit lightsDeactivated();
+}
+
+void Messenger::videologgerActivate()
+{
+    qDebug() << "videologgerActivate triggered by messenger";
+    publish("VideoLoggerActivate");
+    //emit videologgerActivated(); `
+}
+
+void Messenger::videologgerDeactivate()
+{
+    qDebug() << "videologgerDeactivate triggered by messenger";
+    emit videologgerDeactivated();
 }

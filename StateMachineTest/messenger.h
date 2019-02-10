@@ -7,7 +7,6 @@
 #include <QThread>
 #include <zmq.hpp>
 
-
 class QThread;
 class QString;
 
@@ -20,6 +19,16 @@ public:
 
 signals:
     void messageProcessed(const QString message);//passes the message from subscriber to GUI
+    void lightsActivated();
+    void lightsDeactivated();
+    void videologgerActivated();
+    void videologgerDeactivated();
+
+public slots:
+    void lightsActivate();
+    void lightsDeactivate();
+    void videologgerActivate();
+    void videologgerDeactivate();
 
 public slots:
     void processMessage(const QString message);//will take a QJsonObject class and parse it.I will likely remove this.
@@ -46,13 +55,11 @@ signals:
 //The Intermediary class starts the hub of the XSUB/XPUB pattern.
 
 class IntermediaryThread : public QThread
-
 {
 
     Q_OBJECT
 
     void run() override;
-
 };
 
 #endif // MESSENGER_H

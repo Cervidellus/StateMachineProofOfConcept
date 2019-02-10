@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "messenger.h"
-#include "messagehandler.h"
 
 #include <QStateMachine>
 #include <QFinalState>
@@ -12,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-    MessageHandler *messageHandler = new MessageHandler();
+    Messenger *messenger = new Messenger();
 
     QStateMachine *machine = new QStateMachine();
 
@@ -35,12 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
     initialState->addTransition(ui->pushButton1, &QPushButton::clicked, runningState);
     runningState->addTransition(runningState, &QState::finished, finalState);
     pickupSectionState->addTransition(ui->pushButton2, &QPushButton::clicked, movingToDropoffState);
-    pickupSectionState->addTransition(messageHandler, &MessageHandler::lightsDeactivated, movingToDropoffState);
+    pickupSectionState->addTransition(messenger, &Messenger::lightsDeactivated, movingToDropoffState);
     movingToDropoffState->addTransition(ui->pushButton1, &QPushButton::clicked, droppingOffSectionState);
     droppingOffSectionState->addTransition(ui->pushButton2, &QPushButton::clicked, movingToPickupState);
     movingToPickupState->addTransition(ui->pushButton1, &QPushButton::clicked, pickupSectionState);
-
-
 
     //Add the top level states to machine. Child states are automatically added.
     machine->addState(initialState);
@@ -48,19 +45,18 @@ MainWindow::MainWindow(QWidget *parent) :
     machine->addState(finalState);
 
     //Implement actions to occur on entry or exit from states
-    connect(runningState, &QState::entered, messageHandler, &MessageHandler::lightsActivate);
-    connect(runningState, &QState::exited, messageHandler, &MessageHandler::lightsDeactivate);
-    connect(movingToDropoffState, &QState::entered, messageHandler, &MessageHandler::videologgerActivate);
-    connect(movingToDropoffState, &QState::exited, messageHandler, &MessageHandler::videologgerDeactivate);
-    connect(movingToPickupState, &QState::entered, messageHandler, &MessageHandler::videologgerActivate);
-    connect(movingToPickupState, &QState::exited, messageHandler, &MessageHandler::videologgerDeactivate);
-
+    connect(runningState, &QState::entered, messenger, &Messenger::lightsActivate);
+    connect(runningState, &QState::exited, messenger, &Messenger::lightsDeactivate);
+    connect(movingToDropoffState, &QState::entered, messenger, &Messenger::videologgerActivate);
+    connect(movingToDropoffState, &QState::exited, messenger, &Messenger::videologgerDeactivate);
+    connect(movingToPickupState, &QState::entered, messenger, &Messenger::videologgerActivate);
+    connect(movingToPickupState, &QState::exited, messenger, &Messenger::videologgerDeactivate);
 
     //Connect state machine signals to the GUI.
-    connect (messageHandler, &MessageHandler::lightsActivated, this, [this](){ui->lightsRadioButton->setChecked(true);});
-    connect (messageHandler, &MessageHandler::lightsDeactivated, this, [this](){ui->lightsRadioButton->setChecked(false);});
-    connect (messageHandler, &MessageHandler::videologgerActivated, this, [this](){ui->videoLoggingRadioButton->setChecked(true);});
-    connect (messageHandler, &MessageHandler::videologgerDeactivated, this, [this](){ui->videoLoggingRadioButton->setChecked(false);});
+    connect (messenger, &Messenger::lightsActivated, this, [this](){ui->lightsRadioButton->setChecked(true);});
+    connect (messenger, &Messenger::lightsDeactivated, this, [this](){ui->lightsRadioButton->setChecked(false);});
+    connect (messenger, &Messenger::videologgerActivated, this, [this](){ui->videoLoggingRadioButton->setChecked(true);});
+    connect (messenger, &Messenger::videologgerDeactivated, this, [this](){ui->videoLoggingRadioButton->setChecked(false);});
 
 
     //Signal to the GUI that the state machine has finished
