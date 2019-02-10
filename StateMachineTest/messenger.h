@@ -27,7 +27,6 @@ public slots:
 private:
     zmq::context_t m_context;
     zmq::socket_t m_publisher;
-
 };
 
 
@@ -40,6 +39,19 @@ class SubscriberThread : public QThread
 
 signals:
     void messageReceived(const QString message);
+
+};
+
+
+//The Intermediary class starts the hub of the XSUB/XPUB pattern.
+
+class IntermediaryThread : public QThread
+
+{
+
+    Q_OBJECT
+
+    void run() override;
 
 };
 

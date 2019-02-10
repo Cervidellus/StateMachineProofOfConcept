@@ -5,10 +5,12 @@
 #include "zmq.hpp"
 #include "messenger.h"
 
-MessageHandler::MessageHandler(QObject *parent) : QObject(parent)
+MessageHandler::MessageHandler(QObject *parent) : QObject(parent),
+    m_messenger()
 {
-   Messenger *m_messenger = new Messenger();
-
+    //try and initialize messenger in initializer list
+   m_messenger = new Messenger();
+   m_messenger->publish("TestOfTheMessageHandlersssss");
 }
 
 void MessageHandler::lightsActivate()
@@ -27,15 +29,9 @@ void MessageHandler::lightsDeactivate()
 
 void MessageHandler::videologgerActivate()
 {
-    QString message = "testing_zmq_communication";
-//    std::string mymessage = "testing";
-//    zmq::message_t message(mymessage.size());
-//    memcpy (message.data(), mymessage.data(), mymessage.size());
-
-//    qDebug() << "videologgerActivate triggered by messenger";
-//    qDebug() << "sending " << message.data();
-    m_messenger->publish(message);
-    emit videologgerActivated();
+    qDebug() << "videologgerActivate triggered by messenger";
+    m_messenger->publish("VideoLoggerActivate");
+    //emit videologgerActivated(); `
 }
 
 void MessageHandler::videologgerDeactivate()

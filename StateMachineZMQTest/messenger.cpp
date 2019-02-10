@@ -8,7 +8,7 @@ Messenger::Messenger(QObject *parent) : QObject(parent),
     m_publisher(m_context, ZMQ_PUB)
 {
     //bind the publisher
-    m_publisher.bind("tcp://127.0.0.1:5556");
+    m_publisher.connect("tcp://127.0.0.1:5556");
     //setup the subscriber thread
     SubscriberThread *subscriberThread = new SubscriberThread();//I wanted to do new SubscriberThread(this); but it didn't take it?
     //make connections between subscriber thread and handler
@@ -48,7 +48,7 @@ void SubscriberThread::run() {
     //set up socket
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, ZMQ_SUB);
-    subscriber.connect("tcp://127.0.0.1:5556");
+    subscriber.connect("tcp://127.0.0.1:5555");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "", 0);//subscribes to all messages
     while (true){
         //recieve and hand off messages

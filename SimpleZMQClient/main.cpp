@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
     zmq::context_t context (1);
     zmq::socket_t socket (context, ZMQ_SUB);
-    socket.connect ("tcp://127.0.0.1:5556");
+    socket.connect ("tcp://127.0.0.1:5555");
     socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
     while (true) {
         zmq::message_t received;

@@ -2,14 +2,16 @@
 #define MESSAGEHANDLER_H
 
 #include <QObject>
-
-class Messenger;
+#include "messenger.h"
 
 //This class is meant to provide the signals and slots for communicating
 //between a node and the zmq sockets.
 //when this becomes a library, this will become an abstract class
 //each node will have to subclass it and reimplemnt the signals and slots
 //defaults will be just be qDebug output
+
+//next steps: convert to xpub/xsub, test communication, then convert to a library where the state machine can initialize the xpub/xsub
+
 
 class MessageHandler : public QObject
 {
@@ -33,7 +35,7 @@ public:
         void videologgerDeactivate();
 
     private:
-        Messenger *m_messenger;
+         Messenger *m_messenger;
 };
 
 #endif // MESSAGEHANDLER_H

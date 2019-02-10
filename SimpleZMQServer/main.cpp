@@ -11,15 +11,14 @@ int main(int argc, char *argv[])
     zmq::context_t context (1);
      zmq::socket_t socket (context, ZMQ_PUB);
      std::cout << "Connecting." << std::endl;
-     socket.bind("tcp://127.0.0.1:5556");
-     //  Do 10 requests, waiting each time for a response
-     int msgnumber = 1;
+     socket.connect("tcp://127.0.0.1:5556");
      while (true) {
-         std::cout << "Press enter to send message." << std::endl;
-         std::cin.ignore();
-         zmq::message_t zmqmessage (5);
-         memcpy (zmqmessage.data (), "Hello", 5);
-         std::cout << "Sending message " << msgnumber << "…" << std::endl;
+         std::cout << "Enter Message to Send:" << std::endl;
+         std::string message;
+         std::cin >> message;
+         std::cout << "Sending " << message << std::endl << std::endl;
+         zmq::message_t zmqmessage (message.size());
+         memcpy (zmqmessage.data (), message.c_str(), message.size());
          socket.send (zmqmessage);
      }
     return a.exec();
