@@ -66,8 +66,9 @@ void Messenger::processMessage(const QString message){
     else if (message == "PickupSection"){
         emit signalPickupSection();
     }
-    else if (message == "SectionPickupUp"){
+    else if (message == "SectionPickedUp"){
         emit signalSectionPickedUp();
+        qDebug() << "signalSectionPickedUp emitted";
     }
     else if (message == "EnableJoystickInput"){
         emit signalEnableJoystickInput();
@@ -165,7 +166,7 @@ void Messenger::slotPlaceSection()
 
 void Messenger::slotSectionPlaced()
 {
-    publish("SecionPlaced");
+    publish("SectionPlaced");
 }
 
 void Messenger::slotMoveToPickup()
