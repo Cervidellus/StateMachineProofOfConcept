@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <zmq.hpp>
-#include <messenger.h>
+//#include <oldmessenger.h>
+#include "messenger.h"
 
 namespace Ui {
 class MainWindow;
