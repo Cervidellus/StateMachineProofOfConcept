@@ -27,7 +27,7 @@
       <item>
        <widget class="QPushButton" name="pushButton2">
         <property name="text">
-         <string>PushButton2</string>
+         <string>Finished</string>
         </property>
        </widget>
       </item>
@@ -71,6 +71,13 @@
         </property>
         <property name="autoExclusive">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="JoystickRadioButton">
+        <property name="text">
+         <string>Joystick Input</string>
         </property>
        </widget>
       </item>

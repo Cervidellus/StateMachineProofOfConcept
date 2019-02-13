@@ -21,10 +21,15 @@ Messenger::Messenger(QObject *parent) : QObject(parent),
 
 void Messenger::publish(const QString &message)
 {
-    QByteArray messageArray = message.toUtf8();
-    zmq::message_t zmqmessage (messageArray.size());
-    memcpy( zmqmessage.data(), messageArray.data(), messageArray.size() );
-    m_publisher.send(zmqmessage, zmqmessage.size());
+//    QByteArray messageArray = message.toUtf8();
+//    zmq::message_t zmqmessage (messageArray.size());
+//    memcpy( zmqmessage.data(), messageArray.data(), messageArray.size() );
+//    m_publisher.send(zmqmessage, zmqmessage.size());
+    std::string stringMessage = message.toLocal8Bit().constData();
+    int size = stringMessage.size();
+    zmq::message_t zmqmessage (size);
+    memcpy (zmqmessage.data (), stringMessage.c_str(), size);
+    m_publisher.send(zmqmessage);
 //  TODO: handle error if send fails
 }
 

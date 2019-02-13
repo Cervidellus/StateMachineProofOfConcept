@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QState *movingToDropoffState = createState("Moving To Section Dropoff", runningState);
     QState *droppingOffSectionState = createState("Dropping Off Section", runningState);
     QState *movingToPickupState = createState("Moving To Section Pickup", runningState);
-    QFinalState *runningFinalState = new QFinalState(runningState);
     runningState->setInitialState(pickupSectionState);
 
     QFinalState *finalState = new QFinalState();
@@ -32,12 +31,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Add the transitions to the state machine
     initialState->addTransition(ui->pushButton1, &QPushButton::clicked, runningState);
-    runningState->addTransition(runningState, &QState::finished, finalState);
-    pickupSectionState->addTransition(ui->pushButton2, &QPushButton::clicked, movingToDropoffState);
-    pickupSectionState->addTransition(messenger, &Messenger::lightsDeactivated, movingToDropoffState);
-    movingToDropoffState->addTransition(ui->pushButton1, &QPushButton::clicked, droppingOffSectionState);
-    droppingOffSectionState->addTransition(ui->pushButton2, &QPushButton::clicked, movingToPickupState);
-    movingToPickupState->addTransition(ui->pushButton1, &QPushButton::clicked, pickupSectionState);
+    runningState->addTransition(ui->pushButton2, &QPushButton::clicked, finalState);
+    pickupSectionState->addTransition(messenger, &Messenger::signalSectionPickedUp, movingToDropoffState);
+    movingToDropoffState->addTransition(messenger, &Messenger::signalArrivedAtDropoff, droppingOffSectionState);
+    droppingOffSectionState->addTransition(messenger, &Messenger::signalSectionPlaced, movingToPickupState);
+    movingToPickupState->addTransition(messenger, &Messenger::signalArrivedAtPickup, pickupSectionState);
 
     //Add the top level states to machine. Child states are automatically added.
     machine->addState(initialState);
@@ -45,18 +43,26 @@ MainWindow::MainWindow(QWidget *parent) :
     machine->addState(finalState);
 
     //Implement actions to occur on entry or exit from states
-    connect(runningState, &QState::entered, messenger, &Messenger::lightsActivate);
-    connect(runningState, &QState::exited, messenger, &Messenger::lightsDeactivate);
-    connect(movingToDropoffState, &QState::entered, messenger, &Messenger::videologgerActivate);
-    connect(movingToDropoffState, &QState::exited, messenger, &Messenger::videologgerDeactivate);
-    connect(movingToPickupState, &QState::entered, messenger, &Messenger::videologgerActivate);
-    connect(movingToPickupState, &QState::exited, messenger, &Messenger::videologgerDeactivate);
+    connect(runningState, &QState::entered, messenger, &Messenger::slotActivateLights);
+    connect(runningState, &QState::exited, messenger, &Messenger::slotDeactivateLights);
+    connect(pickupSectionState, &QState::entered, messenger, &Messenger::slotVideologgerActivate);
+    connect(pickupSectionState, &QState::exited, messenger, &Messenger::slotVideologgerDeactivate);
+    connect(droppingOffSectionState, &QState::entered, messenger, &Messenger::slotVideologgerActivate);
+    connect(droppingOffSectionState, &QState::exited, messenger, &Messenger::slotVideologgerDeactivate);
+    connect(pickupSectionState, &QState::entered, messenger, &Messenger::signalEnableJoystickInput);
+    connect(pickupSectionState, &QState::exited, messenger, &Messenger::signalDisableJoystickInput);
+    connect(droppingOffSectionState, &QState::entered, messenger, &Messenger::signalEnableJoystickInput);
+    connect(droppingOffSectionState, &QState::exited, messenger, &Messenger::signalDisableJoystickInput);
 
     //Connect state machine signals to the GUI.
-    connect (messenger, &Messenger::lightsActivated, this, [this](){ui->lightsRadioButton->setChecked(true);});
-    connect (messenger, &Messenger::lightsDeactivated, this, [this](){ui->lightsRadioButton->setChecked(false);});
-    connect (messenger, &Messenger::videologgerActivated, this, [this](){ui->videoLoggingRadioButton->setChecked(true);});
-    connect (messenger, &Messenger::videologgerDeactivated, this, [this](){ui->videoLoggingRadioButton->setChecked(false);});
+    connect (messenger, &Messenger::signalLightsActivated, this, [this](){ui->lightsRadioButton->setChecked(true);});
+    connect (messenger, &Messenger::signalLightsDeactivated, this, [this](){ui->lightsRadioButton->setChecked(false);});
+    connect (messenger, &Messenger::signalVideoLoggerActivated, this, [this](){ui->videoLoggingRadioButton->setChecked(true);});
+    connect (messenger, &Messenger::signalVideoLoggerDeactivated, this, [this](){ui->videoLoggingRadioButton->setChecked(false);});
+    connect (messenger, &Messenger::signalVideoLoggerActivated, this, [this](){ui->videoLoggingRadioButton->setChecked(true);});
+    connect (messenger, &Messenger::signalVideoLoggerDeactivated, this, [this](){ui->videoLoggingRadioButton->setChecked(false);});
+    connect (messenger, &Messenger::signalJoystickInputEnabled, this , [this](){ui->JoystickRadioButton->setChecked(true);});
+    connect (messenger, &Messenger::signalJoystickInputDisabled, this , [this](){ui->JoystickRadioButton->setChecked(false);});
 
 
     //Signal to the GUI that the state machine has finished

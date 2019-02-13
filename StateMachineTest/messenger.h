@@ -19,18 +19,60 @@ public:
 
 signals:
     void messageProcessed(const QString message);//passes the message from subscriber to GUI
-    void lightsActivated();
-    void lightsDeactivated();
-    void videologgerActivated();
-    void videologgerDeactivated();
+
+//both signals and slots are provided for everything, so that I can copy and paste code into ZMQ nodes
+//signals for commands to send commands to ZMQ nodes
+    void signalMoveToDropoff();
+    void signalArrivedAtDropoff();
+    void signalPlaceSection();
+    void signalSectionPlaced();
+    void signalMoveToPickup();
+    void signalArrivedAtPickup();
+    void signalPickupSection();
+    void signalSectionPickedUp();
+
+//signals to turn on and off services in ZMQ nodes
+    void signalEnableJoystickInput();
+    void signalJoystickInputEnabled();
+    void signalDisableJoystickInput();
+    void signalJoystickInputDisabled();
+
+    void signalActivateLights();
+    void signalLightsActivated();
+    void signalDeactivateLights();
+    void signalLightsDeactivated();
+
+    void signalVideoLoggerActivate();
+    void signalVideoLoggerActivated();
+    void signalVideoLoggerDeactivate();
+    void signalVideoLoggerDeactivated();
 
 public slots:
-    void lightsActivate();
-    void lightsDeactivate();
-    void videologgerActivate();
-    void videologgerDeactivate();
 
-public slots:
+    void slotMoveToDropoff();
+    void slotArrivedAtDropoff();
+    void slotPlaceSection();
+    void slotSectionPlaced();
+    void slotMoveToPickup();
+    void slotArrivedAtPickup();
+    void slotPickupSection();
+    void slotSectionPickedUp();
+
+    void slotEnableJoystickInput();
+    void slotJoystickInputEnabled();
+    void slotDisableJoystickInput();
+    void slotJoystickInputDisabled();
+
+    void slotActivateLights();
+    void slotLightsActivated();
+    void slotDeactivateLights();
+    void slotLightsDeactivated();
+
+    void slotVideologgerActivate();
+    void slotVideoLoggerActivated();
+    void slotVideologgerDeactivate();
+    void slotVideoLoggerDeactivated();
+
     void processMessage(const QString message);//will take a QJsonObject class and parse it.I will likely remove this.
 
 private:

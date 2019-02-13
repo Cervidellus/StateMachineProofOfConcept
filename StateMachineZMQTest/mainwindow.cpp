@@ -16,9 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
     addZMQButton("Lights Turned Off", "Lights Turned Off", 1 , 1);
     addZMQButton("Turn Video Logger On", "Turn Video Logger On", 2, 0);
     addZMQButton("Video Logger Activated", "VideoLoggerActivated", 2, 1);
-    addZMQButton("Video Logger Stopped", "Video Logger Stopped", 3, 1);
+    addZMQButton("Video Logger Deactivated", "VideoLoggerDeactivated", 3, 1);
     addZMQButton("Move To Pickup", "Move To Pickup", 4, 0);
     addZMQButton("Moved to Pickup", "Moved to Pickup", 4, 1);
+    addZMQButton("Pick Up Section", "PickupSection", 5, 0);
+    addZMQButton("Section Pickup Up", "SectionPickedUp", 5, 1);
 
     //TODO:add a dialog for adding new buttons that will send a particular message
 
