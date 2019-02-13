@@ -8,3 +8,5 @@ This framework makes it easy to create hierarchically ordered states, add transi
 
 Communication is done via zeroMQ via an XPUB/XSUB model. Using this setup, the communication could easily be converted to a conversation mode where the state machine could detect if a node crashed. 
 
+The StateMachineZMQtest application allows you to walk through the state machine without connecting it to hardware by pushing buttons in the gui. 
+
