@@ -11,6 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
+    //start the XPUB/XSUB intermediary thread. Only do this in the state machine.
+    IntermediaryThread *intermediaryThread = new IntermediaryThread();
+    intermediaryThread->start();
+
+    //start the messenger.
+
     Messenger *messenger = new Messenger();
 
     QStateMachine *machine = new QStateMachine();

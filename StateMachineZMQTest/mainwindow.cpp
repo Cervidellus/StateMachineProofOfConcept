@@ -15,6 +15,10 @@ MainWindow::MainWindow(QWidget *parent) :
     addZMQButton("Arrived At Dropoff","ArrivedAtDropoff", 1, 0);
     addZMQButton("Section Placed", "SectionPlaced", 2, 0);
     addZMQButton("Arrived At Pickup", "ArrivedAtPickup", 3, 0);
+    addZMQButton("Lights Activated", "LightsActivated" , 4, 0);
+    addZMQButton("Lights Deactivated", "LightsDeactivated" , 4, 1);
+    addZMQButton("Video Logger Activated", "VideoLoggerActivated" , 5 , 0);
+    addZMQButton("Video Logger Deactivated", "VideoLoggerDeactivated" , 5 , 1);
 
     //TODO:add a dialog for adding new buttons that will send a particular message
 

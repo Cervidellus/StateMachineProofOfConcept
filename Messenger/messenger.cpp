@@ -9,8 +9,8 @@ Messenger::Messenger(QObject *parent) : QObject(parent),
 {
 
     //start the XPUB/XSUB intermediary thread
-    IntermediaryThread *intermediaryThread = new IntermediaryThread();
-    intermediaryThread->start();
+//    IntermediaryThread *intermediaryThread = new IntermediaryThread();
+//    intermediaryThread->start();
 
     //setup the subscriber thread
     SubscriberThread *subscriberThread = new SubscriberThread();
@@ -37,13 +37,8 @@ void Messenger::publish(const QString &message)
 }
 
 void Messenger::processMessage(const QString message){
-    //todo, connect message to console window
+    //todo: change to a QMap
     //The intention here is to process the message, parsing it into the envelope, message, and parameters
-
-//    void slotVideologgerActivate();
-//    void slotVideoLoggerActivated();
-//    void slotVideologgerDeactivate();
-//    void slotVideoLoggerDeactivated();
 
     if (message == "MoveToDropoff"){
         emit signalMoveToDropoff();
