@@ -11,3 +11,5 @@ Communication is done via zeroMQ via an XPUB/XSUB model. Using this setup, the c
 The StateMachineZMQtest application allows you to walk through the state machine without connecting it to hardware by pushing buttons in the gui. 
 
 The Messenger library handles all of the communications over ZMQ and can be included in any peripheral nodes.
+
+To get the ZeroMQ working, I used vcpkg to install zeromq as well as cppzmq. On windows at least, it can be tricky to build them yourself correctly. 
